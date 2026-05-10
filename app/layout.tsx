@@ -1,8 +1,8 @@
 // nextjs
 import type { Metadata } from "next";
 
-// 公共样式
-import "./globals.css";
+// proviers
+import GlobalProvider from '@/components/providers/global';
 
 // head
 export const metadata: Metadata = {
@@ -15,6 +15,7 @@ export default function RootLayout( { children }: Readonly<{ children: React.Rea
     return (
         <html lang="zh-CN">
             <body>
+                <GlobalProvider />
                 {children}
             </body>
         </html>

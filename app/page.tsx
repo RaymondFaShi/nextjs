@@ -1,13 +1,15 @@
+'use client'
 
-
+// react
 import React from "react";
 
-export default function RootPage() {
+// interface
 
+export default function RootPage() {
+    log( '1', 2, 3 );
     React.useEffect( () => {
 
     }, [] );
-    console.log( window );
 
     return (
         <>This is root</>
