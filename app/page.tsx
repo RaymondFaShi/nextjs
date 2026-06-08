@@ -4,14 +4,14 @@
 import React from "react";
 
 // interface
-
 export default function RootPage() {
-    log( '1', 2, 3 );
+    console.log( typeof log );
+
+    // construct
     React.useEffect( () => {
 
-    }, [] );
-
+    } );
     return (
-        <>This is root</>
+        <b>111</b>
     );
 }

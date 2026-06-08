@@ -1,15 +1,23 @@
 // global.d.ts
+// 日志分级
+type logLevel = 'i'| 's'| 'w'| 'e'| 'd';
+
 // 控制台日志输出
 interface Log {
-    // eslint-disable-next-line
-    ( identify: any, ...args?: Array<any> ): void;
-
-    warn(): void;
+    ( identify: logLevel| unknown, ...args: Array<unknown> ): void;
+    i( ...args: [ unknown, Array<unknown> ] ): void;  // info
+    s( ...args: Array<unknown> ): void;  // success
+    w( ...args: Array<unknown> ): void;  // warning
+    e( ...args: Array<unknown> ): void;  // error
+    d( ...args: Array<unknown> ): void;  // debug
 }
 
 /** 重定义global */
 declare global {
+    // 日志
     var log: Log;
 }
 
-export {};
+export {
+    Log
+};

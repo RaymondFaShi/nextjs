@@ -2,7 +2,10 @@
 import type { Metadata } from "next";
 
 // proviers
-import GlobalProvider from '@/components/providers/global';
+// import GlobalProvider from '@/bootstrap/providers/global';
+
+// global
+import "@/utils/global";
 
 // head
 export const metadata: Metadata = {
@@ -15,7 +18,7 @@ export default function RootLayout( { children }: Readonly<{ children: React.Rea
     return (
         <html lang="zh-CN">
             <body>
-                <GlobalProvider />
+                {/* <GlobalProvider /> */}
                 {children}
             </body>
         </html>
