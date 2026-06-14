@@ -7,7 +7,7 @@ import React from "react";
 export default function RootPage() {
     // construct
     React.useEffect( () => {
-        // log( 111 );
+        
     } );
     return (
         <b>111</b>
