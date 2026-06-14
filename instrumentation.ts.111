@@ -1,0 +1,7 @@
+// utils
+import { log } from '@/utils/global';
+console.log( 111 );
+export function register() {
+    // server端注册日志
+    globalThis.log = log;
+}

@@ -14,8 +14,13 @@ interface Log {
 
 /** 重定义global */
 declare global {
-    // 日志
+    // server日志
     var log: Log;
+
+    // client日志
+    interface Window {
+        log: Log
+    }
 }
 
 export {

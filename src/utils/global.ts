@@ -1,15 +1,10 @@
-'use client'
-
-// react
-import React from "react";
-
 // interface
 import { type Log } from "@/types/global";
 
 /**
  * 日志实例
  */
-const log: Log = Object.assign(
+export const log: Log = Object.assign(
     ( identify: unknown, ...args: Array<unknown> ) => {
         console.log( identify, ...args );
     },
@@ -31,19 +26,3 @@ const log: Log = Object.assign(
         }
     }
 );
-
-/**
- * server端注册日志
- */
-globalThis.log = log;
-
-// global provider
-export default function GlobalProvier() {
-    // construct
-    React.useEffect( () => {
-        // client注册log
-        // window.log = globalThis.log;
-    }, [] );
-
-    return null;
-}
