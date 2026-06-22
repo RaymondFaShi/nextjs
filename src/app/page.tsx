@@ -4,7 +4,7 @@
 import React from "react";
 
 // interface
-export default function RootPage() {
+export default function Page() {
     // construct
     React.useEffect( () => {
         
