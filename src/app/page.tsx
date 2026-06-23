@@ -4,10 +4,10 @@
 import React from "react";
 
 // interface
-export default function RootPage() {
+export default function Page() {
     // construct
     React.useEffect( () => {
-        log.i( 111 );
+        
     } );
     return (
         <b>111</b>
