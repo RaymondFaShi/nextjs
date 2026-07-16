@@ -1,10 +1,8 @@
 // global.d.ts
-// 日志分级
-type logLevel = 'i'| 's'| 'w'| 'e'| 'd';
 
 // 控制台日志输出
 interface Log {
-    ( identify: logLevel| unknown, ...args: Array<unknown> ): void;
+    ( ...args: Array<unknown> ): void;
     i( ...args: Array<unknown> ): void;  // info
     s( ...args: Array<unknown> ): void;  // success
     w( ...args: Array<unknown> ): void;  // warning
