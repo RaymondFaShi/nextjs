@@ -1,5 +1,8 @@
 /// <reference types="types" />
 
+/** 混合字符 */
+type MixedStr = string | number | boolean | undefined | null;
+
 /** 类型元素改为必填 */
 type RequiredKey<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
