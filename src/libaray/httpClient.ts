@@ -15,7 +15,6 @@ interface RequestConfig {
     timeout?: number;
 }
 
-
 class HttpClient {
     // 默认请求参数
     private defaultRequestConfig: RequestConfig;
