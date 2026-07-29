@@ -17,6 +17,7 @@ class HttpClient {
 
     /**
      * construct
+     * @param RequestConfig defaultRequestConfig 默认请求参数
      */
     public constructor( defaultRequestConfig: RequestConfig = {} ) {
         this.defaultRequestConfig = defaultRequestConfig;
@@ -24,12 +25,17 @@ class HttpClient {
 
     /**
      * 发起请求
+     * @param {string} uri 资源地址
+     * @param {RequestConfig} requestConfig 请求参数
      */
-    public async request( url: string, fetchConfig: RequestInit ) {
-        
+    private async request<T = unknown>( uri: string, requestConfig: RequestConfig ): Promise<T> {
+        // return fetch(  )
     }
 
     /** 请求方法 */
+    public async get<T>( uri: string, requestConfig: RequestConfig ): Promise<T> {
+        return this.request( uri, requestConfig );
+    }
 }
 
 export default HttpClient;
