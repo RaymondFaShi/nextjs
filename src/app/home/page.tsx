@@ -6,7 +6,7 @@ import React from "react";
 export default function HomePage() {
     // log( 111 );
     React.useEffect( () => {
-        log( '111' )
+        
     }, [] )
 
     return (

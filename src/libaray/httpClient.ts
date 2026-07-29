@@ -8,13 +8,9 @@
 // interface
 interface RequestConfig {
     baseURL?: string;   // 基础URL
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';   // 请求方式
-    headers?: Record<string, string>;   // 报头数据
-    params?: Record<string, MixedStr>;  // 请求参数
-    body?: BodyInit;
     timeout?: number;
 }
-URLSearchParams
+
 class HttpClient {
     // 默认请求参数
     private defaultRequestConfig: RequestConfig;
@@ -29,8 +25,8 @@ class HttpClient {
     /**
      * 发起请求
      */
-    private async request() {
-
+    public async request( url: string, fetchConfig: RequestInit ) {
+        
     }
 
     /** 请求方法 */
