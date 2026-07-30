@@ -8,33 +8,36 @@
 // interface
 interface RequestConfig {
     baseURL?: string;   // 基础URL
-    timeout?: number;
+    timeout?: number;   // 超时时间
 }
 
 class HttpClient {
-    // 默认请求参数
-    private defaultRequestConfig: RequestConfig;
+    // 请求配置
+    private requestConfig: RequestConfig;
 
     /**
      * construct
      * @param RequestConfig defaultRequestConfig 默认请求参数
      */
-    public constructor( defaultRequestConfig: RequestConfig = {} ) {
-        this.defaultRequestConfig = defaultRequestConfig;
+    public constructor( requestConfig: RequestConfig = {} ) {
+        // 定义默认参数
+        
+
+        this.requestConfig = requestConfig;
     }
 
     /**
      * 发起请求
      * @param {string} uri 资源地址
-     * @param {RequestConfig} requestConfig 请求参数
+     * @param {RequestInit} fetchConfig fetch参数
      */
-    private async request<T = unknown>( uri: string, requestConfig: RequestConfig ): Promise<T> {
-        // return fetch(  )
+    public async request<R = unknown>( uri: string, fetchConfig: RequestInit ): Promise<R> {
+        
     }
 
     /** 请求方法 */
-    public async get<T>( uri: string, requestConfig: RequestConfig ): Promise<T> {
-        return this.request( uri, requestConfig );
+    public async get<T>( uri: string, fetchConfig: RequestInit ): Promise<T> {
+        
     }
 }
 
