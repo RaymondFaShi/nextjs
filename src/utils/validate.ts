@@ -1,5 +1,6 @@
 // 验证方法库
 
+// 验证字符特殊类型 //////////////////////////////////////////////////
 /**
  * 验证字符串前缀
  * @param path 路径
@@ -24,68 +25,6 @@ export function validURL( url: string ): boolean {
 export function validEmail( email: string ): boolean {
     const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg.test( email );
-}
-
-/**
- * 验证是否小写
- * @param str 字符串
- */
-export function validLowerCase( str: string ): boolean {
-    return /^[a-z]+$/.test( str );
-}
-
-/**
- * 验证是否大写
- * @param str 字符串
- */
-export function validUpperCase( str: string ): boolean {
-    return /^[A-Z]+$/.test( str );
-}
-
-/**
- * 验证是否字母组成
- * @param str 字符串
- */
-export function validAlpha( str: string ): boolean {
-    return /^[A-Za-z]+$/.test( str );
-}
-
-/**
- * 验证是否字符串
- * @param value 值
- */
-export function isString( value: unknown ): boolean {
-    if ( typeof value === 'string' || value instanceof String ) {
-        return true;
-    }
-    return false;
-}
-
-/**
- * 验证是否浮点数
- * @param str 字符串
- */
-export function isFloat( str: string ): boolean {
-    return /^[-+]?[0-9]+\.[0-9]+$/.test( str );
-}
-
-/**
- * 验证是否数组
- * @param value 值
- */
-export function isArray( value: unknown ): boolean {
-    if ( typeof Array.isArray === 'undefined' ) {
-        return Object.prototype.toString.call( value ) === '[object Array]';
-    }
-    return Array.isArray( value );
-}
-
-/**
- * 验证是否中文
- * @param str 字符串
- */
-export function validCn( str: string ): boolean {
-    return /^[\u4e00-\u9fa5]+$/.test( str );
 }
 
 /**
@@ -122,10 +61,82 @@ export function isExcel( file: File ): boolean {
     return /\.(xlsx|xls|csv)$/.test( file.name )
 }
 
+// 验证字符类型 //////////////////////////////////////////////////
+/**
+ * 验证是否中文
+ * @param str 字符串
+ */
+export function validCn( str: string ): boolean {
+    return /^[\u4e00-\u9fa5]+$/.test( str );
+}
+
+/**
+ * 验证是否小写
+ * @param str 字符串
+ */
+export function validLowerCase( str: string ): boolean {
+    return /^[a-z]+$/.test( str );
+}
+
+/**
+ * 验证是否大写
+ * @param str 字符串
+ */
+export function validUpperCase( str: string ): boolean {
+    return /^[A-Z]+$/.test( str );
+}
+
+/**
+ * 验证是否字母组成
+ * @param str 字符串
+ */
+export function validAlpha( str: string ): boolean {
+    return /^[A-Za-z]+$/.test( str );
+}
+
+// 验证规则 //////////////////////////////////////////////////
 /**
  * 验证密码规则
  * @param str 字符串
  */
 export function validPasswordRule( str: string ): boolean {
     return /^(?=.*[a-zA-Z])(?=.*\d).{8,16}$/.test( str );
+}
+
+// 补充全局验证 //////////////////////////////////////////////////
+/**
+ * 验证是否字符串
+ * @param value 值
+ */
+export function isString( value: unknown ): boolean {
+    if ( typeof value === 'string' || value instanceof String ) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 验证是否浮点数
+ * @param str 字符串
+ */
+export function isFloat( str: string ): boolean {
+    return /^[-+]?[0-9]+\.[0-9]+$/.test( str );
+}
+
+/**
+ * 验证是否数组
+ * @param value 值
+ */
+export function isArray( value: unknown ): boolean {
+    if ( typeof Array.isArray === 'undefined' ) {
+        return Object.prototype.toString.call( value ) === '[object Array]';
+    }
+    return Array.isArray( value );
+}
+
+/**
+ * 
+ */
+export function isObject( value: unknown ): boolean {
+    return value !== null && typeof value === 'object' && !Array.isArray( value );
 }

@@ -4,9 +4,66 @@
  * 对象copy
  * @param jsonStr 复制json字符
  */
-export function copy<T extends Record<string, unknown >>( jsonStr: T ): T {
+export function copy<T extends Record<string, unknown>>( jsonStr: T ): T {
     return JSON.parse( JSON.stringify( jsonStr ) );
 }
+
+/**
+ * object合并
+ * @param target 目标object
+ * @param source 源object
+ * @param append 是否追加
+ * @returns {Object}
+ */
+export function objectMerge<T extends Record<string, unknown>>( target: T, source: T, append: boolean = true ): T {
+    // 非object
+    if( target === null || typeof target !== 'object' || Array.isArray( target ) ) {
+        target = {} as T;
+    }
+
+    // 如果是array
+    if( Array.isArray( source ) ) {
+        source.forEach( ( sourceItem, property ) => {
+            return objectMerge( target[ property ], sourceItem as T, append );
+        } );
+    }
+}
+
+// /**
+//  * object合并
+//  * @param target 目标object
+//  * @param source 源object
+//  * @param append 是否追加
+//  * @returns {Object}
+//  */
+// export function objectMerge<T extends Record<string, unknown>>( target: T, source: T, append: boolean = true ): T {
+//     if ( typeof target !== "object" || target === null ) {
+//         target = {} as T;
+//     }
+//     if ( Array.isArray( source ) ) {
+//         // return source.slice();
+//         source.forEach( ( sourceItem, property ) => {
+//             return objectMerge( target[ property ], sourceItem as T, append );
+//         } );
+//     }
+//     Object.keys( source )
+//         .forEach( ( property ) => {
+//             const sourceProperty = typeof source[ property ] === "undefined" || source[ property ] === null ? "" : source[ property ];
+//             if ( append || typeof target[ property ] !== "undefined" ) {
+//                 if ( typeof sourceProperty === "object" ) {
+//                     target[ property ] = objectMerge( target[ property ], sourceProperty, append );
+//                 } else {
+//                     target[ property ] = sourceProperty;
+//                 }
+//             }
+
+//             // 超出数据
+//             if ( typeof sourceProperty === "object" && JSON.stringify( target ) !== "{}" && typeof target[ property ] === "undefined" ) {
+//                 target[ property ] = objectMerge( copy( target[ Object.keys( target )[ 0 ] ] ), sourceProperty, append );
+//             }
+//         } );
+//     return target;
+// }
 
 /**
  * 安全随机数
@@ -63,8 +120,7 @@ export function secureRandStr( length: number, type: 0| 1| 2 = 0, repeat: boolea
     while ( generateStr.length < length ) {
         // 获取随机字符串
         const randIndex = secureRandNum( 0, seedStrArr.length - 1 );
-        if( !Number.isInteger( randIndex ) ) return false;
-        const randStr = seedStrArr[ randIndex ];
+        const randStr = seedStrArr[ ( randIndex as number ) ];
 
         // 判断是否重复
         if( !repeat ) {
@@ -77,3 +133,22 @@ export function secureRandStr( length: number, type: 0| 1| 2 = 0, repeat: boolea
     return generateStr.join( '' );
 }
 
+/**
+ * 安全比较
+ * @param aStr a字符
+ * @param bStr b字符
+ */
+export function secureCompare( aStr: string, bStr: string ): boolean {
+    // 保证长度一致
+    if ( aStr.length !== bStr.length ) return false;
+
+    // 返回
+    let result = 0;
+
+    // 每个字符异或累加，保证循环不会提前返回
+    for ( let i = 0; i < aStr.length; i++ ) {
+        result |= aStr.charCodeAt( i ) ^ bStr.charCodeAt( i );
+    }
+
+    return result === 0;
+}

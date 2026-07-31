@@ -6,7 +6,8 @@ import { secureRandNum } from "@/utils/common";
 import React from "react";
 
 export default function HomePage() {
-    log( secureRandNum( 1000, 9999 ) );
+    const a = null;
+    log( typeof a === 'object' );
     return (
         <>
             <span>this is home</span>
