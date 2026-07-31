@@ -1,6 +1,6 @@
 // 验证方法库
 
-// 验证字符特殊类型 //////////////////////////////////////////////////
+// 验证字符特殊类型 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * 验证字符串前缀
  * @param path 路径
@@ -61,7 +61,7 @@ export function isExcel( file: File ): boolean {
     return /\.(xlsx|xls|csv)$/.test( file.name )
 }
 
-// 验证字符类型 //////////////////////////////////////////////////
+// 验证字符类型 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * 验证是否中文
  * @param str 字符串
@@ -94,7 +94,7 @@ export function validAlpha( str: string ): boolean {
     return /^[A-Za-z]+$/.test( str );
 }
 
-// 验证规则 //////////////////////////////////////////////////
+// 验证规则 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * 验证密码规则
  * @param str 字符串
@@ -103,7 +103,7 @@ export function validPasswordRule( str: string ): boolean {
     return /^(?=.*[a-zA-Z])(?=.*\d).{8,16}$/.test( str );
 }
 
-// 补充全局验证 //////////////////////////////////////////////////
+// 补充全局验证 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * 验证是否字符串
  * @param value 值
@@ -135,8 +135,9 @@ export function isArray( value: unknown ): boolean {
 }
 
 /**
- * 
+ * 是否是object
+ * @param value 值
  */
 export function isObject( value: unknown ): boolean {
-    return value !== null && typeof value === 'object' && !Array.isArray( value );
+    return value !== null && !Array.isArray( value ) && typeof value === 'object';
 }

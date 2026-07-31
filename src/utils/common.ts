@@ -13,57 +13,71 @@ export function copy<T extends Record<string, unknown>>( jsonStr: T ): T {
  * @param target 目标object
  * @param source 源object
  * @param append 是否追加
- * @returns {Object}
  */
-export function objectMerge<T extends Record<string, unknown>>( target: T, source: T, append: boolean = true ): T {
-    // 非object
-    if( target === null || typeof target !== 'object' || Array.isArray( target ) ) {
+export function objectMerge<T extends Record<string, unknown>, U extends Record<string, unknown>>( target: T, source: U, append: boolean = true ): T {
+    // 目标非object
+    if( target === null || typeof target !== 'object' ) {
         target = {} as T;
     }
 
-    // 如果是array
+    // 如果源是array
     if( Array.isArray( source ) ) {
         source.forEach( ( sourceItem, property ) => {
-            return objectMerge( target[ property ], sourceItem as T, append );
+            return objectMerge( target[ property ] as T, sourceItem as T, append );
         } );
     }
+
+    // 遍历源数据复制到目标数据
+    Object.keys( source )
+        .forEach( ( property: keyof U ) => {
+            // 源数据
+            const sourceData = ( typeof source[ property ] === "undefined" || source[ property ] === null )? "": source[ property ];
+
+            // 如果追加或者目标有对应的键值
+            if ( append || typeof target[ property as keyof T ] !== "undefined" ) {
+                if ( typeof sourceData === "object" && sourceData!== null ) {
+                    target[ property as keyof T ] = objectMerge( target[ property as keyof T ] as T, sourceData as T, append ) as T[ keyof T ];
+                }
+
+                else {
+                    target = Object.assign( {}, target, { [ property ]: sourceData } );
+                }
+            }
+
+            // 超出数据
+            if ( typeof sourceData === "object" && JSON.stringify( target ) !== "{}" && typeof target[ property as keyof T ] === "undefined" ) {
+                // 追加目标数据
+                const appendTargetData = objectMerge( JSON.parse( JSON.stringify( target[ Object.keys( target )[ 0 ] ] ) ), sourceData as U, append );
+                target = Object.assign( {}, target, { [ property ]: appendTargetData } );
+            }
+        } );
+    return target;
 }
 
-// /**
-//  * object合并
-//  * @param target 目标object
-//  * @param source 源object
-//  * @param append 是否追加
-//  * @returns {Object}
-//  */
-// export function objectMerge<T extends Record<string, unknown>>( target: T, source: T, append: boolean = true ): T {
-//     if ( typeof target !== "object" || target === null ) {
-//         target = {} as T;
-//     }
-//     if ( Array.isArray( source ) ) {
-//         // return source.slice();
-//         source.forEach( ( sourceItem, property ) => {
-//             return objectMerge( target[ property ], sourceItem as T, append );
-//         } );
-//     }
-//     Object.keys( source )
-//         .forEach( ( property ) => {
-//             const sourceProperty = typeof source[ property ] === "undefined" || source[ property ] === null ? "" : source[ property ];
-//             if ( append || typeof target[ property ] !== "undefined" ) {
-//                 if ( typeof sourceProperty === "object" ) {
-//                     target[ property ] = objectMerge( target[ property ], sourceProperty, append );
-//                 } else {
-//                     target[ property ] = sourceProperty;
-//                 }
-//             }
-
-//             // 超出数据
-//             if ( typeof sourceProperty === "object" && JSON.stringify( target ) !== "{}" && typeof target[ property ] === "undefined" ) {
-//                 target[ property ] = objectMerge( copy( target[ Object.keys( target )[ 0 ] ] ), sourceProperty, append );
-//             }
-//         } );
-//     return target;
-// }
+/**
+ * 数组合并
+ * @param {array} arr1
+ * @param {array} arr2
+ */
+export function arrayMerge( arr1: unknown[], arr2: unknown[] ) {
+    let _arr = new Array();
+    for ( let i = 0; i < arr1.length; i++ ) {
+        _arr.push( arr1[ i ] );
+    }
+    for ( let i = 0; i < arr2.length; i++ ) {
+        let flag = true;
+        for ( let j = 0; j < arr1.length; j++ ) {
+            if ( arr2[ i ] == arr1[ j ] ) {
+                flag = false;
+                break;
+            }
+        }
+        if ( flag ) {
+            _arr.push( arr2[ i ] );
+        }
+    }
+    return _arr;
+}
 
 /**
  * 安全随机数

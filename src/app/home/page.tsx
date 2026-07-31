@@ -1,13 +1,13 @@
 // 'use client';
 
 import HttpClient from "@/libaray/httpClient";
-import { secureRandNum } from "@/utils/common";
+import { objectMerge, secureRandNum } from "@/utils/common";
+import { getTime, parseTime } from "@/utils/datetime";
 // react
 import React from "react";
 
 export default function HomePage() {
-    const a = null;
-    log( typeof a === 'object' );
+    log( getTime( 'start' ) );
     return (
         <>
             <span>this is home</span>
