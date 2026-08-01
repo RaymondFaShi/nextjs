@@ -1,8 +1,9 @@
 // 时间方法
 /**
- * 格式化时间
+ * 解析时间
  * @param time 时间
  * @param cFormat 时间格式
+ * @returns 格式化后的时间字符串
  */
 export function parseTime( time: Date| string| number, cFormat: string = '{y}-{m}-{d} {h}:{i}:{s}' ): string {
     // 时间配置
@@ -53,18 +54,42 @@ export function parseTime( time: Date| string| number, cFormat: string = '{y}-{m
 }
 
 /**
- * 获取时间
- * @param {string} type
- * @returns {Date}
+ * 格式化时间
+ * @param time 时间戳
+ * @param option 格式化模板
+ * @returns 格式化后的时间字符串
+ * @returns 格式后时间
  */
-export function getTime( type: string ) {
-    if ( type === "start" ) {
-        return new Date()
-            .getTime() - 3600 * 1000 * 24 * 90;
+export function formatTime( time: number, option?: string ): string {
+    // 时间戳处理
+    if ( ( '' + time ).length === 10 ) {
+        time = parseInt( time.toString() ) * 1000
+    }
+    else {
+        time = +time
     }
 
-    else {
-        return new Date( new Date()
-            .toDateString() );
-    }
+    // 时间差计算
+    const d = new Date( time )
+    const now = Date.now()
+    const diff = ( now - d.getTime() ) / 1000
+
+    // 时间差判断
+    if ( diff < 30 )  return '刚刚'
+    else if ( diff < 3600 ) return Math.ceil( diff / 60 ) + '分钟前'
+    else if ( diff < 3600 * 24 ) return Math.ceil( diff / 3600 ) + '小时前'
+    else if ( diff < 3600 * 24 * 2 ) return '1天前'
+
+    if ( option ) return parseTime( time, option );
+    else return d.getMonth()+ 1+ '月'+ d.getDate()+ '日'+ d.getHours()+ '时'+ d.getMinutes()+ '分';
+}
+
+/**
+ * 转换时间戳
+ * @param {string} date
+ */
+export function strtotime( date?: string ): number {
+    const time = date ? new Date( date ) : new Date();
+    return parseInt( ( time.getTime() / 1000 ).toString()
+        .split( '.' )[ 0 ] );
 }

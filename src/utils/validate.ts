@@ -141,3 +141,27 @@ export function isArray( value: unknown ): boolean {
 export function isObject( value: unknown ): boolean {
     return value !== null && !Array.isArray( value ) && typeof value === 'object';
 }
+
+/**
+ * 是否为空
+ * @param data 值
+ */
+export function isEmpty( data: unknown ) {
+    if ( data === 0 || data === null || data === undefined ) {
+        return true;
+    }
+    if ( typeof data === 'string' || Array.isArray( data ) ) {
+        return data.length === 0;
+    }
+    return false;
+}
+
+/**
+ * 检查值是否在数组中
+ * @param value 是否在数组
+ * @param array 数组
+ * @returns 是否在数组中
+ */
+export function inArray( value: unknown, array: unknown[] ): boolean {
+    return array.includes( value );
+}
