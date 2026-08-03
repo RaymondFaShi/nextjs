@@ -1,4 +1,5 @@
 // error.d.ts
+
 declare namespace Error {
     /** 基础错误 */
     interface BaseError {

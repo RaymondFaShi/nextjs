@@ -70,12 +70,12 @@ class HttpClient {
     }
 
     // 注册请求拦截器
-    public registerRequestInterceptor( interceptor: RequestInterceptor ): number {
+    public addRequestInterceptor( interceptor: RequestInterceptor ): number {
         return this.interceptors.request.push( interceptor );
     }
 
     // 注册响应拦截器
-    public registerResponseInterceptor( interceptor: ResponseInterceptor ): number {
+    public addResponseInterceptor( interceptor: ResponseInterceptor ): number {
         return this.interceptors.response.push( interceptor );
     }
 
