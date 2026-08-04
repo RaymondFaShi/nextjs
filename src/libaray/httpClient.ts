@@ -21,8 +21,8 @@ interface RequestInterceptor {
 }
 
 interface ResponseInterceptor {
-    fulfilled: ( response: Response ) => Promise<Response>;
-    rejected?: ( error: unknown ) => void;
+    onRequest: ( response: Response ) => Promise<Response>;
+    onError?: ( error: unknown ) => void;
 }
 
 class HttpClient {
