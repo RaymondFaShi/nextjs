@@ -8,42 +8,21 @@
 
 // interface
 /** 请求配置 */
-interface RequestConfig {   // 请求配置
+interface RequestConfig {
     baseURL: string;   // 基础URL
     timeout: number;   // 超时时间
     fetchConfig?: RequestInit; // fetch配置
 }
 
-/** 请求拦截器 */
+// 请求拦截器
 interface RequestInterceptor {
-    fulfilled: RequestInterceptorFulfilled;
-    rejected?: RequestInterceptorRejected;
+    onRequest: ( response: Response ) => Promise<Response>;
+    onError?: ( error: unknown ) => void;
 }
 
-/** 响应拦截器 */
 interface ResponseInterceptor {
-    fulfilled: ResponseInterceptorFulfilled;
-    rejected?: ResponseInterceptorRejected;
-}
-
-/** 请求拦截器 - 成功 */
-interface RequestInterceptorFulfilled {
-    ( config: RequestConfig ): RequestConfig | Promise<RequestConfig>;
-}
-
-/** 请求拦截器 - 失败 */
-interface RequestInterceptorRejected {
-    ( error: unknown ): unknown;
-}
-
-/** 响应拦截器 - 成功 */
-interface ResponseInterceptorFulfilled {
-    ( response: Response ): Response | Promise<Response>;
-}
-
-/** 响应拦截器 - 失败 */
-interface ResponseInterceptorRejected{
-    ( error: unknown ): unknown;
+    fulfilled: ( response: Response ) => Promise<Response>;
+    rejected?: ( error: unknown ) => void;
 }
 
 class HttpClient {
@@ -70,23 +49,13 @@ class HttpClient {
     }
 
     // 注册请求拦截器
-    public addRequestInterceptor( interceptor: RequestInterceptor ): number {
-        return this.interceptors.request.push( interceptor );
+    public useRequestInterceptor( interceptor: RequestInterceptor ): number {
+        return this.interceptors.request.push( new interceptor );
     }
 
     // 注册响应拦截器
-    public addResponseInterceptor( interceptor: ResponseInterceptor ): number {
+    public useResponseInterceptor( interceptor: ResponseInterceptor ): number {
         return this.interceptors.response.push( interceptor );
-    }
-
-    // 注销请求拦截器
-    public removeRequestInterceptor( requestInterceptorId: number ): void {
-        this.interceptors.request.splice( requestInterceptorId, 1 );
-    }
-
-    // 注销响应拦截器
-    public removeResponseInterceptor( responseInterceptorId: number ): void {
-        this.interceptors.response.splice( responseInterceptorId, 1 );
     }
 
     // 执行请求拦截器
@@ -157,6 +126,6 @@ class HttpClient {
 export default HttpClient;
 export type {
     RequestConfig,
-    RequestInterceptor, RequestInterceptorFulfilled, RequestInterceptorRejected,
-    ResponseInterceptor, ResponseInterceptorFulfilled, ResponseInterceptorRejected,
+    RequestInterceptor,
+    ResponseInterceptor,
 };
