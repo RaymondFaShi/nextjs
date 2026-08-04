@@ -1,4 +1,4 @@
-// 'use client';
+'use client';
 
 // react
 import React from "react";
@@ -8,7 +8,10 @@ import HttpClient from "@/libaray/httpClient";
 
 
 export default function HomePage() {
-    
+
+    log( crypto.randomUUID() );
+
+
     return (
         <>
             <span>this is home</span>
