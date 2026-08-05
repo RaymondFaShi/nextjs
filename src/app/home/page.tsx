@@ -1,16 +1,16 @@
-'use client';
+// 'use client';
 
 // react
 import React from "react";
 
-// libaray
-import HttpClient from "@/libaray/httpClient";
+// api
+import api from '@/api/client';
 
 
 export default function HomePage() {
 
-    log( crypto.randomUUID() );
-
+    const test = api.request( '' );
+    
 
     return (
         <>

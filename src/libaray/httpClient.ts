@@ -10,6 +10,7 @@
 /** 请求配置 */
 interface RequestConfig {
     baseURL: string;   // 基础URL
+    params?: Record<string, unknown>; // url参数
     timeout: number;   // 超时时间
     fetchConfig?: RequestInit; // fetch配置
 }
@@ -98,7 +99,10 @@ class HttpClient {
         this.interceptors.response.delete( responseInterceptorId );
     }
 
-    // 执行请求拦截器
+    /**
+     * 执行请求拦截器
+     * @param config 请求配置
+     */
     private async handleRequestInterceptors( config: RequestConfig ): Promise<RequestConfig> {
         for ( const requestInterceptor of this.interceptors.request.values() ) {
             try {
@@ -111,7 +115,10 @@ class HttpClient {
         return config;
     }
 
-    // 执行响应拦截器
+    /**
+     * 执行响应拦截器
+     * @param response 响应
+     */
     private async handleResponseInterceptors( response: unknown ): Promise<unknown> {
         for ( const responseInterceptor of this.interceptors.response.values() ) {
             try {
@@ -125,36 +132,75 @@ class HttpClient {
     }
 
     /**
+     * 构建请求url
+     * @param baseURL 基础URL
+     * @param uri 资源地址
+     * @param params url参数
+     */
+    private buildRequestUrl( baseURL: string, uri: string, params: Record<string, unknown> ): string {
+        // 初始化url
+        const url = new URL( uri, baseURL );
+
+        // 添加请求参数
+        for ( const [ key, value ] of Object.entries( params ) ) {
+            url.searchParams.append( key, String( value ) );
+        }
+
+        return url.toString();
+    }
+
+    /**
      * 发起请求
      * @param uri 资源地址
      * @param requestConfig request参数
      */
-    public async request<R = unknown>( uri: string, requestConfig: Partial<RequestConfig> ): Promise<R> {
-        // 处理url
-        const url = this.requestConfig.baseURL? `${this.requestConfig.baseURL}${uri}`: uri;
+    public async request<R = unknown>( uri: string, requestConfig: Partial<RequestConfig> = {} ): Promise<R> {
+        try {
+            // 合并请求配置
+            const mergedRequestConfig: RequestConfig = { ...this.requestConfig, ...requestConfig };
 
-        // 合并请求配置
-        const mergedRequestConfig: RequestConfig = { ...this.requestConfig, ...requestConfig };
+            // 执行请求拦截器
+            const finalConfig = await this.handleRequestInterceptors( mergedRequestConfig );
 
-        // 执行请求拦截器
-        // const finalConfig = await this.executeRequestInterceptors( mergedRequestConfig );/z
+            // 构建请求url
+            const requestURL = this.buildRequestUrl( finalConfig.baseURL, uri, finalConfig.params|| {} ); // 请求url
 
-        // 发起请求
-        // const response = await fetch( url, finalConfig.fetchConfig );
+            // 发起请求
+            const response = await fetch( requestURL, {
+                ...finalConfig.fetchConfig,
+                signal: AbortSignal.timeout( finalConfig.timeout?? undefined ), // 超时
+            } );
 
-        // // 执行响应拦截器
-        // const finalResponse = await this.executeResponseInterceptors( response );
+            // 执行响应拦截器
+            const finalResponse = await this.handleResponseInterceptors( response ) as R;
 
-        // // 解析响应数据
-        // const data: R = await finalResponse.json();
+            return finalResponse;
+        }
 
-        return data;
+        catch ( error ) {
+            throw error;
+        }
     }
 
-    /** 请求方法 */
-    public async get<T>( uri: string, requestConfig: RequestConfig ): Promise<T> {
-        
+    /** 快捷请求方法 */
+    public get<T>( uri: string, requestConfig: RequestConfig ): Promise<T> {  // get
+        return this.request( uri, {
+            ...requestConfig,
+            fetchConfig: {
+                method: 'get',
+            }
+        } );
     }
+
+    public post<T>( uri: string, requestConfig: RequestConfig ): Promise<T> { // post
+        return this.request( uri, {
+            ...requestConfig,
+            fetchConfig: {
+                method: 'post',
+            }
+        } );
+    }
+    
 }
 
 export default HttpClient;
