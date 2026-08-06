@@ -119,10 +119,10 @@ class HttpClient {
      * 执行响应拦截器
      * @param response 响应
      */
-    private async handleResponseInterceptors( response: unknown ): Promise<unknown> {
+    private async handleResponseInterceptors<R = unknown>( response: R ): Promise<R> {
         for ( const responseInterceptor of this.interceptors.response.values() ) {
             try {
-                response = await responseInterceptor.handle( response );
+                response = await responseInterceptor.handle( response ) as R;
             }
             catch ( error ) {
                 throw error;
@@ -200,7 +200,6 @@ class HttpClient {
             }
         } );
     }
-    
 }
 
 export default HttpClient;
