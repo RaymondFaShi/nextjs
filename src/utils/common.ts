@@ -109,3 +109,64 @@ export function compareVersion( localVersion: string, remoteVersion: string ): n
  * @returns 异步执行n毫秒
  */
 export const sleep = ( ms: number ) => new Promise( resolve => setTimeout( resolve, ms ) );
+
+/**
+ * 防抖
+ * @param func 函数
+ * @param wait 等待时间
+ * @param immediate 是否立即执行
+ */
+export function debounce<T extends ( ...args: any[] ) => any >( func: T, wait: number, immediate: boolean = false ): ( this: ThisParameterType<T>, ...args: Parameters<T> ) => ReturnType<T> {
+    let timeout: ReturnType<typeof setTimeout> | null,
+        args: Parameters<T>| null,
+        context: ThisParameterType<T> | null,
+        timestamp: number = 0,
+        result: ReturnType<T>;
+
+    const later = function() {
+    // 据上一次触发时间间隔
+        const last = +new Date() - timestamp
+
+        // 上次被包装函数被调用时间间隔 last 小于设定时间间隔 wait
+        if ( last < wait && last > 0 ) {
+            timeout = setTimeout( later, wait - last )
+        }
+
+        else {
+            timeout = null
+            // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
+            if ( !immediate ) {
+                result = func.apply( context, args as Parameters<T> )
+                if ( !timeout ) {
+                    context = null;
+                    args = null;
+                }
+            }
+        }
+    }
+
+    return function( this: ThisParameterType<T>, ...args ): ReturnType<T> {
+        context = this as ThisParameterType<T>;
+        timestamp = +new Date();
+
+        const callNow = immediate && !timeout
+        // 如果延时不存在，重新设定延时
+        if ( !timeout ) timeout = setTimeout( later, wait )
+        if ( callNow ) {
+            result = func.apply( context, args )
+            context = null;
+            args = null;
+        }
+
+        return result
+    }
+}
+
+/**
+ * @returns {string}
+ */
+export function createUniqueString() {
+    const timestamp = +new Date() + ''
+    const randomNum = Math.floor( ( 1 + Math.random() ) * 65536 ).toString()
+    return ( +( randomNum + timestamp ) ).toString( 32 )
+}

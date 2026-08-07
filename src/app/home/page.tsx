@@ -9,8 +9,10 @@ import api from '@/api/client';
 
 export default function HomePage() {
 
-    const test = api.request( '' );
-    
+    function test( ...args: unknown[] ) {
+        log( args )
+    }
+    test();
 
     return (
         <>
