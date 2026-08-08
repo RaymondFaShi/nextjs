@@ -111,12 +111,16 @@ export function compareVersion( localVersion: string, remoteVersion: string ): n
 export const sleep = ( ms: number ) => new Promise( resolve => setTimeout( resolve, ms ) );
 
 /**
- * 防抖
+ * 防抖(建议直接用lodash-es)
  * @param func 函数
- * @param wait 等待时间
+ * @param wait 等待时间(毫秒)
  * @param immediate 是否立即执行
  */
-export function debounce<T extends ( ...args: any[] ) => any >( func: T, wait: number, immediate: boolean = false ): ( this: ThisParameterType<T>, ...args: Parameters<T> ) => ReturnType<T> {
+export function debounce<T extends ( ...args: unknown[] ) => unknown >(
+    func: T,
+    wait: number,
+    immediate: boolean = false,
+): ( this: ThisParameterType<T>, ...args: Parameters<T> ) => ReturnType<T> {
     let timeout: ReturnType<typeof setTimeout> | null,
         args: Parameters<T>| null,
         context: ThisParameterType<T> | null,
@@ -136,7 +140,7 @@ export function debounce<T extends ( ...args: any[] ) => any >( func: T, wait: n
             timeout = null
             // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
             if ( !immediate ) {
-                result = func.apply( context, args as Parameters<T> )
+                result = func.apply( context, args as Parameters<T> ) as ReturnType<T>;
                 if ( !timeout ) {
                     context = null;
                     args = null;
@@ -145,17 +149,18 @@ export function debounce<T extends ( ...args: any[] ) => any >( func: T, wait: n
         }
     }
 
-    return function( this: ThisParameterType<T>, ...args ): ReturnType<T> {
-        context = this as ThisParameterType<T>;
+    return function( this: ThisParameterType<T>, ...args: Parameters<T> ): ReturnType<T> {
+        let lastContext = this as ThisParameterType<T>| null;
+        let lastArgs: Parameters<T>| null = args;
         timestamp = +new Date();
 
         const callNow = immediate && !timeout
         // 如果延时不存在，重新设定延时
         if ( !timeout ) timeout = setTimeout( later, wait )
         if ( callNow ) {
-            result = func.apply( context, args )
-            context = null;
-            args = null;
+            result = func.apply( lastContext, lastArgs ) as ReturnType<T>;
+            lastContext = null;
+            lastArgs = null;
         }
 
         return result
@@ -163,10 +168,72 @@ export function debounce<T extends ( ...args: any[] ) => any >( func: T, wait: n
 }
 
 /**
- * @returns {string}
+ * 节流(建议直接用lodash-es)
+ * @param func 函数
+ * @param wait 等待时间(毫秒)
+ * @param options 选项 { leading: 第一次触发, trailing: 最后一次触发 }
+ * @returns 
  */
-export function createUniqueString() {
-    const timestamp = +new Date() + ''
-    const randomNum = Math.floor( ( 1 + Math.random() ) * 65536 ).toString()
-    return ( +( randomNum + timestamp ) ).toString( 32 )
+export function throttle<T extends ( ...args: any[] ) => any>(
+    func: T,
+    wait: number,
+    options: { leading?: boolean, trailing?: boolean } = {}
+): (
+    this: ThisParameterType<T>,
+    ...args: Parameters<T>
+) => ReturnType<T> | undefined {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+    let timestamp: number = 0;
+    let lastArgs: Parameters<T> | null = null;
+    let lastContext: ThisParameterType<T> | null = null;
+    let result: ReturnType<T>;
+    const { leading = true, trailing = true } = options;
+
+    const invoke = () => {
+        if( lastArgs !== null ) {
+            result = func.apply( lastContext, lastArgs );
+            lastArgs = null;
+            lastContext = null;
+        }
+    };
+
+    const later = () => {
+        timestamp = leading? Date.now(): 0;
+        timeout = null;
+        if ( trailing ) {
+            invoke();
+        }
+
+        else {
+            lastArgs = null;
+            lastContext = null;
+        }
+    };
+
+    return function( this: ThisParameterType<T>, ...args: Parameters<T> ) {
+        lastContext = this as ThisParameterType<T>| null;
+        lastArgs = args;
+        const now = Date.now();
+        if ( !timestamp && !leading ) {
+            timestamp = now;
+        }
+        const remaining = wait - ( now - timestamp );
+
+        if ( remaining <= 0 || remaining > wait ) {
+            if ( timeout ) {
+                clearTimeout( timeout );
+                timeout = null;
+            }
+            timestamp = now;
+            invoke();
+        }
+
+        else if ( !timeout && trailing ) {
+            timeout = setTimeout(
+                later,
+                remaining
+            );
+        }
+        return result;
+    };
 }

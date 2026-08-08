@@ -7,7 +7,7 @@ abstract class BaseException implements Exception.BaseException {
     public readonly traceId: string;
 
     /** code */
-    public readonly code: string;
+    public static readonly code: string = '';
 
     /** status */
     public readonly status: number| string;
@@ -22,7 +22,7 @@ abstract class BaseException implements Exception.BaseException {
     */
     public constructor( status: number| string, message: string ) {
         this.traceId = '';
-        this.code = '';
+        // this.code = '';
         this.status = status;
         this.message = message;
     }

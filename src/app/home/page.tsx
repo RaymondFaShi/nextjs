@@ -1,4 +1,4 @@
-// 'use client';
+'use client';
 
 // react
 import React from "react";
@@ -9,10 +9,6 @@ import api from '@/api/client';
 
 export default function HomePage() {
 
-    function test( ...args: unknown[] ) {
-        log( args )
-    }
-    test();
 
     return (
         <>
