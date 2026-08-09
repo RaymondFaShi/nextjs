@@ -2,13 +2,13 @@
  * 基础异常
  */
 
-abstract class BaseException extends Error implements Exception.BaseException {
+class BaseException extends Error implements BaseException {
 
     /** traceId */
     public readonly traceId: string;
 
     /** code */
-    public static readonly code: string = '';
+    public readonly code: string;
 
     /** status */
     public readonly status: number| string;
@@ -25,9 +25,10 @@ abstract class BaseException extends Error implements Exception.BaseException {
         super( message );
 
         this.traceId = '';
+        this.code = '';
         this.status = status;
         this.message = message;
     }
 }
-const ExceptionClass: Exception.BaseExceptionConstructor = BaseException;
-export default ExceptionClass;
+
+export default ( BaseException satisfies Exception.BaseExceptionConstructor<Exception.BaseException> );
