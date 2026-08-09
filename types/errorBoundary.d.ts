@@ -1,8 +1,8 @@
 // error.d.ts
 
-declare namespace Error {
+declare namespace ErrorBoundary {
     /** 基础错误 */
-    interface BaseError {
+    interface BaseErrorBoundary {
         readonly errorId: string;       // 错误id
         readonly errorCode: string;     // 错误代码
         readonly errorStatus: number| string;    // 错误状态码

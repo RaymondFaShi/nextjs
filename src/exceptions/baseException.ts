@@ -2,7 +2,8 @@
  * 基础异常
  */
 
-abstract class BaseException implements Exception.BaseException {
+abstract class BaseException extends Error implements Exception.BaseException {
+
     /** traceId */
     public readonly traceId: string;
 
@@ -21,11 +22,12 @@ abstract class BaseException implements Exception.BaseException {
      * @param message 异常信息
     */
     public constructor( status: number| string, message: string ) {
+        super( message );
+
         this.traceId = '';
-        // this.code = '';
         this.status = status;
         this.message = message;
     }
 }
-
-export default BaseException;
+const ExceptionClass: Exception.BaseExceptionConstructor = BaseException;
+export default ExceptionClass;
