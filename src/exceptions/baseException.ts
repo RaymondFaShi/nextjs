@@ -8,7 +8,7 @@ class BaseException extends Error implements BaseException {
     public readonly traceId: string;
 
     /** code */
-    public readonly code: string;
+    public readonly code: string = '';
 
     /** status */
     public readonly status: number| string;
@@ -25,7 +25,6 @@ class BaseException extends Error implements BaseException {
         super( message );
 
         this.traceId = '';
-        this.code = '';
         this.status = status;
         this.message = message;
     }

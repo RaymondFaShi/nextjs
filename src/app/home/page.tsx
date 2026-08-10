@@ -10,6 +10,8 @@ import BaseException from "@/exceptions/baseException";
 
 export default function HomePage() {
 
+    fetch( 'http://api.erpvape.com/index.php' );
+
     return (
         <>
             <span>this is home</span>
