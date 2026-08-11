@@ -1,17 +1,18 @@
-'use client';
+// 'use client';
 
 // react
 import React from "react";
 
-// api
-import api from '@/api/client';
-import BaseException from "@/exceptions/baseException";
+// nextjs
+import { headers } from "next/headers";
 
 
-export default function HomePage() {
 
-    fetch( 'http://api.erpvape.com/index.php' );
 
+export default async function HomePage() {
+
+    const headerList = await headers();
+    log( headerList.get( 'x-trace-id ' ), 1111 );
     return (
         <>
             <span>this is home</span>
