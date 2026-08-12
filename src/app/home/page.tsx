@@ -1,4 +1,4 @@
-// 'use client';
+'use client';
 
 // react
 import React from "react";
@@ -7,12 +7,12 @@ import React from "react";
 import { headers } from "next/headers";
 
 
-
-
-export default async function HomePage() {
-
-    const headerList = await headers();
-    log( headerList.get( 'x-trace-id ' ), 1111 );
+export default function HomePage() {
+    React.useEffect( () => {
+        const headerList = headers();
+        log( headerList.get( 'x-trace-id' ), 1111 );
+    }, [] );
+    
     return (
         <>
             <span>this is home</span>
