@@ -1,7 +1,7 @@
 // proxy
 
 // next
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, ProxyConfig } from "next/server";
 
 // middleware
 import traceProxy from "./middleware/proxy/trace";
@@ -27,7 +27,7 @@ export async function proxy( request: NextRequest ) {
 }
 
 // 配置
-export const config = {
+export const config: ProxyConfig = {
     matcher: [
         // allow routes
         '/home/:path*',
