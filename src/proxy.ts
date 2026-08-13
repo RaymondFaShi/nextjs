@@ -9,21 +9,12 @@ import traceProxy from "./middleware/proxy/trace";
 // 代理劫持
 export async function proxy( request: NextRequest ) {
     // response
-    const response = NextResponse;
+    const response = NextResponse.next();
 
     // trace
-    // traceProxy( request, response );
-    const requestHeaders = new Headers( request.headers )
+    traceProxy( request, response );
 
-    requestHeaders.set( 'x-trace-id', crypto.randomUUID() );
-
-    return response.next( {
-        request: {
-            headers: requestHeaders,
-        },
-    } );
-
-    // return response;
+    return response;
 }
 
 // 配置
@@ -31,5 +22,6 @@ export const config = {
     matcher: [
         // allow routes
         '/home/:path*',
+        '/user/:path*',
     ]
 };

@@ -4,18 +4,24 @@
 import React from "react";
 
 // nextjs
-import { headers } from "next/headers";
+import { useRouter } from "next/navigation";
 
 
 export default function HomePage() {
+    const router = useRouter();
+
     React.useEffect( () => {
-        const headerList = headers();
-        log( headerList.get( 'x-trace-id' ), 1111 );
+        // fetch( 'http://test.com/index.php' )
     }, [] );
-    
+
+    const navigateToUser = () => {
+        router.push( '/user' );
+    }
+
     return (
         <>
-            <span>this is home</span>
+            <span>this is home</span><br />
+            <a onClick={navigateToUser}>user</a>
         </>
     );
 };
