@@ -8,12 +8,16 @@ import traceProxy from "./middleware/proxy/trace";
 
 // 代理劫持
 export async function proxy( request: NextRequest ) {
-    // response
-    const response = NextResponse.next();
-
     // trace
-    traceProxy( request, response );
+    const { clientId, ctx } = await traceProxy( request );    // trace上下文
 
+    // response
+    const response = NextResponse.next( ctx );
+
+    // 存储cookie
+    response.cookies.set( 'x-client-id', clientId );
+
+    // 响应
     return response;
 }
 

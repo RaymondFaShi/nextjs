@@ -3,17 +3,30 @@
 // next
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function traceProxy( request: NextRequest, response: NextResponse ) {
-    // traceId header key
-    const traceIdHeaderKey: string = 'x-trace-id';
+// 链式追踪key
+const clientHeaderKey = 'x-client-id';  // client id
 
-    // 从报头获取traceId
-    let traceId = request.headers.get( traceIdHeaderKey );
+const traceProxy: Middleware.Proxy = async ( request: NextRequest ) => {
+    // 从报头获取clientId
+    let clientId = request.headers.get( clientHeaderKey );
 
-    // 如果没有自行生成
-    if( !traceId ) {
-        traceId = crypto.randomUUID();
+    // 如果没有自行生成clientId
+    if( !clientId ) {
+        clientId = crypto.randomUUID();
     }
-    log( traceId );
-    // response.headers.set( traceIdHeaderKey, traceId as string );
-}
+
+    // 返回上文
+    const requestHeaders = new Headers( request.headers );
+    requestHeaders.set( clientHeaderKey, clientId );
+
+    return {
+        clientId,
+        ctx: {
+            request: {
+                headers: requestHeaders
+            }
+        }
+    };
+};
+
+export default traceProxy;
