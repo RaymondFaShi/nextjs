@@ -4,18 +4,25 @@
 import { NextRequest, NextResponse, ProxyConfig } from "next/server";
 
 // middleware
-import traceProxy from "./middleware/proxy/trace";
+import traceProxy, { SESSION_ID_KEY, CLIENT_ID_KEY } from "./middleware/proxy/trace";
 
 // 代理劫持
 export async function proxy( request: NextRequest ) {
     // trace
-    const { clientId, ctx } = await traceProxy( request );    // trace上下文
+    const { sessionId, clientId, ctx } = await traceProxy( request );    // trace上下文
 
     // response
     const response = NextResponse.next( ctx );
 
     // 存储cookie
-    response.cookies.set( 'x-client-id', clientId );
+    response.cookies.set( {
+        name: SESSION_ID_KEY,
+        value: sessionId,
+        // httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+    } );
+    response.cookies.set( CLIENT_ID_KEY, clientId );
 
     // 响应
     return response;

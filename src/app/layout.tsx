@@ -1,8 +1,13 @@
 // nextjs
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 
 // proviers
 // import GlobalProvider from '@/bootstrap/providers/global';
+import TraceProvider from '@/bootstrap/providers/trace';
+
+// middleware
+import { SESSION_ID_KEY, CLIENT_ID_KEY } from "@/middleware/proxy/trace";
 
 // head
 export const metadata: Metadata = {
@@ -11,12 +16,18 @@ export const metadata: Metadata = {
 };
 
 // root
-export default function Layout( { children }: Readonly<{ children: React.ReactNode }> ) {
+export default async function Layout( { children }: Readonly<{ children: React.ReactNode }> ) {
+    // 获取追踪链
+    const sessionId = ( await headers() ).get( SESSION_ID_KEY )?? undefined;
+    const clientId = ( await headers() ).get( CLIENT_ID_KEY )?? undefined;
+
     return (
         <html lang="zh-CN">
             <body>
                 {/* <GlobalProvider /> */}
-                {children}
+                <TraceProvider sessionId={sessionId} clientId={clientId}>
+                    {children}
+                </TraceProvider>
             </body>
         </html>
     );

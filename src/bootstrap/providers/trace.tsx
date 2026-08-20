@@ -1,22 +1,38 @@
+'use client';
+
 // react
-import { createContext } from "react";
+import React from "react";
+
+// library
+import Cookies from "@/libaray/cookies";
 
 // interface
-type Context = {
+type TraceContextState = {
+    sessionId: undefined| string;
     clientId: undefined| string;
 };
 
+interface Props extends React.PropsWithChildren {
+    sessionId: TraceContextState[ 'sessionId' ];
+    clientId: TraceContextState[ 'clientId' ];
+}
+
 // context
-const TraceContext = createContext<Context>( undefined );
+const TraceContext = React.createContext<TraceContextState>( { sessionId: undefined, clientId: undefined } );
 
 // trace provider
-export default function TraceProvier( props: React.PropsWithChildren ) {
+function TraceProvier( props: Props ) {
     // props
-    const { children } = props;
+    const { sessionId, clientId, children } = props;
 
     return (
-        <TraceContext.Provider cliendId={'1'}>
+        <TraceContext.Provider value={{ sessionId, clientId }}>
             {children}
         </TraceContext.Provider>
     );
+}
+
+export default TraceProvier;
+export {
+    TraceContext
 }

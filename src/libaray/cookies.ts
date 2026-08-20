@@ -77,6 +77,7 @@ class Cookies {
      * 设置cookie
      * @param cookieName cookie名
      * @param cookieValue cookie值
+     * @param options cookie选项
      */
     public static set( cookieName: string, cookieValue: string, options?: CookieOptions ): void {
         // 没有找到document
@@ -97,6 +98,18 @@ class Cookies {
         }
 
         document.cookie = cookie;
+    }
+
+    /**
+     * 删除cookie
+     * @param coookieName cookie名
+     * @param options cookie选项
+     */
+    public static remove( cookieName: string, options?: Omit<CookieOptions, 'maxAge'| 'expires'> ): void {
+        this.set( cookieName, '', {
+            ...options,
+            maxAge: 0,
+        } );
     }
 }
 

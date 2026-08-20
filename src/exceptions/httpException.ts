@@ -1,9 +1,12 @@
+// exception
+import BaseException from "./baseException";
+
 /**
- * 基础异常
+ * http异常
  */
-abstract class BaseException extends Error implements Exception.BaseException {
+class HttpException extends BaseException {
     /** code */
-    public readonly code: string = '';
+    public readonly code: string = 'network';
 
     /** status */
     public status: number| string;
@@ -18,7 +21,7 @@ abstract class BaseException extends Error implements Exception.BaseException {
     */
     public constructor( status: number| string, message: string ) {
         // parent
-        super( message );
+        super( status, message );
 
         // 状态，消息
         this.status = status;
@@ -26,4 +29,4 @@ abstract class BaseException extends Error implements Exception.BaseException {
     }
 }
 
-export default BaseException;
+export default ( HttpException satisfies Exception.BaseExceptionConstructor<Exception.HttpException> );
