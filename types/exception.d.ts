@@ -11,11 +11,24 @@ declare namespace Exception {
         readonly message: string;           // 异常信息
     }
 
+    /** 基础异常上下文 */
+    interface Context {
+        sessionId?: BaseException[ 'sessionId' ];   // session id
+        clientId?: BaseException[ 'clientId' ]; // client id
+        cause?: unknown;    // cause
+    }
+
     /** http异常 */
     interface HttpException extends BaseException {
         // 链式追踪
         readonly requestId?: string;    // request id
-
         readonly httpStatus: number; // http状态码
+    }
+
+    /** http */
+    interface HttpContext extends Context {
+        requestId?: HttpException[ 'requestId' ];   // request id
+        method?: string;    // 请求方法
+        path?: string;  // 请求路径
     }
 }

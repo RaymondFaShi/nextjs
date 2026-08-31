@@ -1,25 +1,27 @@
 'use client';
 
 // react
-import React from "react";
-
-// nextjs
-import Link from "next/link";
-import BaseException from "@/exceptions/baseException";
+import React, { useReducer } from "react";
 
 // libaray
-import SessionStorage from "@/libaray/sessionStorage";
-import Cookies from "@/libaray/cookies";
+import localStorage from '@/libaray/localStorage';
+
+// reducer
+
+// subscribe
+
 
 export default function HomePage() {
+    // const res = React.useSyncExternalStore(  );
     React.useEffect( () => {
-        SessionStorage.set( 'sessionId', crypto.randomUUID() )
-    }, [] )
+        // localStorage.set( 'test', 'fuck' )
+        localStorage.clear();
+    }, [] );
 
     return (
         <>
             <span>this is home</span><br />
-            <Link href={'/user'}>go</Link>
+            {/* <button onClick={ () => setData( { loaing: true } ) }>+</button> */}
         </>
     );
 };

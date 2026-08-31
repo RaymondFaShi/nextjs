@@ -1,7 +1,7 @@
 /**
  * httpClient http客户端封装（带拦截器）
  * @Version 1.0.0
- * @Email raymond.fa.shi@gmail.com
+ * @Authro raymond.fa.shi
  * @Copyright lemonCarlJ All rights reserved.
  * @License http://www.56code.com/License.txt
  */

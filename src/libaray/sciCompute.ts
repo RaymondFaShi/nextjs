@@ -1,7 +1,10 @@
 /**
- * 科学计算
+ * sciCompute 科学计算
+ * @Version 1.0.0
+ * @Authro raymond.fa.shi
+ * @Copyright lemonCarlJ All rights reserved.
+ * @License http://www.56code.com/License.txt
  */
-
 class sciCompute {
 
     /**

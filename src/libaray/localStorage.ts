@@ -1,36 +1,35 @@
 /**
- * sessionStorage 封装(client)
+ * localStorage 封装(client)
  * @Version 1.0.0
  * @Authro raymond.fa.shi
  * @Copyright lemonCarlJ All rights reserved.
  * @License http://www.56code.com/License.txt
  */
 
-// interface
-
-class SessionStorage {
+class LocalStorage {
     /**
      * 是否客户端
      */
     private static get isClient(): boolean {
         return typeof window !== 'undefined' 
-            && typeof window.sessionStorage !== 'undefined';
+            && typeof window.localStorage !== 'undefined';
     }
 
     /**
      * 获取数据
-     * @param sessionName session名
+     * @param key 键
      */
-    public static get( sessionName: string ): string| null {
+    public static get( key: string ): string| null {
         // 是否客户端
         if( !this.isClient ) return null;
 
         try {
             // 拉取数据
-            const sessionValue = window.sessionStorage.getItem( sessionName );
+            const value = window.localStorage.getItem( key );
 
-            return sessionValue;
+            return value;
         }
+
         catch {
             return null;
         }
@@ -38,16 +37,16 @@ class SessionStorage {
 
     /**
      * 设置数据
-     * @param sessionName session名
-     * @param sessionValue session值
+     * @param key 键
+     * @param value 值
      */
-    public static set( sessionName: string, sessionValue: string ): boolean {
+    public static set( key: string, value: string ): boolean {
         // 是否客户端
         if( !this.isClient ) return false;
 
         try {
             // 设置数据
-            window.sessionStorage.setItem( sessionName, sessionValue );
+            window.localStorage.setItem( key, value );
 
             return true;
         }
@@ -59,18 +58,19 @@ class SessionStorage {
 
     /**
      * 删除数据
-     * @param sessionName session名
+     * @param key 键
      */
-    public static remove( sessionName: string ): boolean {
+    public static remove( key: string ): boolean {
         // 是否客户端
         if( !this.isClient ) return false;
 
         try {
             // 删除数据
-            window.sessionStorage.removeItem( sessionName );
+            window.localStorage.removeItem( key )
 
             return true;
         }
+
         catch {
             return false;
         }
@@ -85,7 +85,7 @@ class SessionStorage {
 
         try {
             // 删除数据
-            window.sessionStorage.clear();
+            window.localStorage.clear();
 
             return true;
         }
@@ -95,4 +95,4 @@ class SessionStorage {
     }
 }
 
-export default SessionStorage;
+export default LocalStorage;

@@ -1,6 +1,6 @@
 // global.d.ts
 
-// 控制台日志输出
+/** 控制台日志输出 */
 interface Log {
     ( ...args: Array<unknown> ): void;
     i( ...args: Array<unknown> ): void;  // info
@@ -12,10 +12,10 @@ interface Log {
 
 /** 重定义global */
 declare global {
-    // server日志
+    /** server日志 */
     var log: Log;
 
-    // client日志
+    /** client日志 */
     interface Window {
         log: Log
     }

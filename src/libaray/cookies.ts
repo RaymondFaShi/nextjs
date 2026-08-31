@@ -1,7 +1,7 @@
 /**
- * cookies cookie封装(client)
+ * cookies 封装(client)
  * @Version 1.0.0
- * @Email raymond.fa.shi@gmail.com
+ * @Authro raymond.fa.shi
  * @Copyright lemonCarlJ All rights reserved.
  * @License http://www.56code.com/License.txt
  */
@@ -24,11 +24,19 @@ type CookieType = Record<string, string>;
 class Cookies {
 
     /**
+     * 是否客户端
+     */
+    private static get isClient(): boolean {
+        return typeof document !== 'undefined' 
+            && typeof document.cookie !== 'undefined';
+    }
+
+    /**
      * 获取全部cookies
      */
     public static getAll(): undefined | CookieType {
-        // 没有找到document
-        if( typeof document === 'undefined' ) return undefined;
+        // 是否客户端
+        if( !this.isClient ) return undefined;
 
         // 初始化返回数据
         const cookiesResult: CookieType = {};
@@ -53,8 +61,8 @@ class Cookies {
      * @param coookieName cookie名
      */
     public static get( coookieName: string ): undefined | string {
-        // 没有找到document
-        if( typeof document === 'undefined' ) return undefined;
+        // 是否客户端
+        if( !this.isClient ) return undefined;
 
         if( document.cookie ) {
             // 全部cookie
@@ -80,8 +88,8 @@ class Cookies {
      * @param options cookie选项
      */
     public static set( cookieName: string, cookieValue: string, options?: CookieOptions ): void {
-        // 没有找到document
-        if( typeof document === 'undefined' ) return;
+        // 是否客户端
+        if( !this.isClient ) return ;
 
         // 设置cookie内容
         let cookie = `${encodeURIComponent( cookieName )}=${encodeURIComponent( cookieValue )}`;
