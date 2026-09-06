@@ -1,8 +1,11 @@
 // middleware.d.ts
-
 declare namespace Middleware {
     /** nextjs proxy */
-    interface Proxy {
-        ( request: NextRequest, response?: NextResponse ): void| MiddlewareResponseInit| NextResponse| Promise<NextResponse>
+    type ProxyResult = Record<string, unknown> & {
+        ctx?: MiddlewareResponseInit;   // reponse配置
+    }
+
+    interface Proxy<ProxyResult> {
+        ( request: NextRequest, response?: NextResponse ): ProxyResult| Promise<ProxyResult>;
     }
 }

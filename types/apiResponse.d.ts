@@ -1,5 +1,5 @@
 // response.d.ts
-declare namespace Response {
+declare namespace ApiResponse {
     /** 基础响应数据 */
     interface BaseResponse {
         code: number| string;   // 系统状态码
@@ -25,11 +25,4 @@ declare namespace Response {
         current: number;    // 当前页
         total: number;      // 总页数
     };
-
-    /**
-     * 选项
-     * @param K key
-     * @param V value
-     */
-    type OptionItem<K = number| string, V = number| string> = { label: K, value: V };
 }

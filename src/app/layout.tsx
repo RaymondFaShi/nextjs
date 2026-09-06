@@ -4,7 +4,8 @@ import { headers } from "next/headers";
 
 // proviers
 // import GlobalProvider from '@/bootstrap/providers/global';
-import TraceProvider from '@/bootstrap/providers/trace';
+import TraceProvider from '@/bootstrap/providers/trace';    // trace
+import { NextIntlClientProvider } from 'next-intl';   // i18n
 
 // middleware
 import { SESSION_ID_KEY, CLIENT_ID_KEY } from "@/middleware/proxy/trace";
@@ -26,7 +27,9 @@ export default async function Layout( { children }: Readonly<{ children: React.R
             <body>
                 {/* <GlobalProvider /> */}
                 <TraceProvider sessionId={sessionId} clientId={clientId}>
-                    {children}
+                    <NextIntlClientProvider>
+                        {children}
+                    </NextIntlClientProvider>
                 </TraceProvider>
             </body>
         </html>

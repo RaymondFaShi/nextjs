@@ -7,7 +7,14 @@ import { NextRequest, NextResponse } from "next/server";
 const SESSION_ID_KEY = 'x-session-id';  // session id
 const CLIENT_ID_KEY = 'x-client-id';  // client id
 
-const traceProxy: Middleware.Proxy = async ( request: NextRequest ) => {
+// interface
+interface TraceResponse {
+    sessionId: string;
+    clientId: string;
+    ctx: NonNullable<Parameters<typeof NextResponse.next>[ 0 ]>;
+}
+
+const traceProxy: Middleware.Proxy<TraceResponse> = async ( request: NextRequest ) => {
     // 获取clientId
     let clientId = request.headers.get( CLIENT_ID_KEY );    // 从报头获取clientId
     if( !clientId ) {   // 如果没有自行生成clientId
