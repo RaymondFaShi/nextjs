@@ -30,7 +30,7 @@ function getClientLocales( acceptLanguage: string ): Locale[] {
 const localeProxy: Middleware.Proxy<{ locale: string }> = async ( request: NextRequest ) => {
     // 获取已经选择的本地语言环境
     const localSelectLocale = request.cookies.get( 'locale' )?.value;
-    log( await getLocale() );
+    // log( await getLocale() );
     if( !localSelectLocale ) {
         // 获取客户端accept language
         const acceptLanguage = request.headers.get( 'accept-language' )|| '';

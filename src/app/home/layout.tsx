@@ -1,8 +1,7 @@
 // react
 import React from "react";
-
 // types
-interface Props extends React.PropsWithChildren {};
+interface Props extends React.PropsWithChildren {}
 
 // 组件
 export default function HomeLayout( props: Props ) {
@@ -13,4 +12,4 @@ export default function HomeLayout( props: Props ) {
             {props.children}
         </>
     );
-};
+}

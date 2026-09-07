@@ -174,7 +174,7 @@ export function debounce<T extends ( ...args: unknown[] ) => unknown >(
  * @param options 选项 { leading: 第一次触发, trailing: 最后一次触发 }
  * @returns 
  */
-export function throttle<T extends ( ...args: any[] ) => any>(
+export function throttle<T extends ( ...args: unknown[] ) => unknown>(
     func: T,
     wait: number,
     options: { leading?: boolean, trailing?: boolean } = {}
@@ -191,7 +191,7 @@ export function throttle<T extends ( ...args: any[] ) => any>(
 
     const invoke = () => {
         if( lastArgs !== null ) {
-            result = func.apply( lastContext, lastArgs );
+            result = func.apply( lastContext, lastArgs ) as ReturnType<T>;
             lastArgs = null;
             lastContext = null;
         }

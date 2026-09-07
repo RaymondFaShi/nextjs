@@ -1,20 +1,19 @@
 // trace proxy
 
 // next
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 // 链式追踪key
 const SESSION_ID_KEY = 'x-session-id';  // session id
 const CLIENT_ID_KEY = 'x-client-id';  // client id
 
 // interface
-interface TraceResponse {
+interface TraceResult {
     sessionId: string;
     clientId: string;
-    ctx: NonNullable<Parameters<typeof NextResponse.next>[ 0 ]>;
 }
 
-const traceProxy: Middleware.Proxy<TraceResponse> = async ( request: NextRequest ) => {
+const traceProxy: Middleware.Proxy<TraceResult> = async ( request: NextRequest ) => {
     // 获取clientId
     let clientId = request.headers.get( CLIENT_ID_KEY );    // 从报头获取clientId
     if( !clientId ) {   // 如果没有自行生成clientId
@@ -27,19 +26,9 @@ const traceProxy: Middleware.Proxy<TraceResponse> = async ( request: NextRequest
         sessionId = crypto.randomUUID();
     }
 
-    // 返回上文
-    const requestHeaders = new Headers( request.headers );
-    requestHeaders.set( SESSION_ID_KEY, sessionId );
-    requestHeaders.set( CLIENT_ID_KEY, clientId );
-
     return {
         sessionId,
         clientId,
-        ctx: {
-            request: {
-                headers: requestHeaders
-            }
-        }
     };
 };
 
